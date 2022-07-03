@@ -27,11 +27,13 @@ const getLaunches = async () => {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    let launches = [];
+  let launches = [];
   let allDates = [];
+  
   try {
     launches = await getLaunches()
     allDates = createCalendar(launches, allDates);
+    await getNextLaunch();
   } catch (error) {
     console.log("Error ", error)
   }
@@ -85,4 +87,55 @@ const createCalendar = (launches, allDates) => {
   }
 }
     
+}
+
+const getNextLaunch = async () => {
+
+  let today = getToday();
+
+  let response = await fetch('https://api.spacexdata.com/v5/launches/query', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json, text/plain, */*',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    query: {
+      date_local: {
+        "$gte": `${today}T20:00:00-00:00`,
+      }
+     },
+    options: { 
+      limit: 365, 
+      sort: {
+        date_unix: "asc"
+      } 
+    }
+  })
+})
+  
+  let data = await response.json();
+  updateMenuDates(today, data.docs[0].date_local.substr(0, 10))
+
+}
+
+
+const updateMenuDates = (today, next) => {
+  document.getElementById('today').innerHTML = `
+    <a href='#${today}' id="todays-date">Todays date:  ${today}</a> 
+    <a href='#${next}' id='next-launch'>Next Launch:  ${next}</a>
+  `
+
+  document.getElementById(`${today}`).style.backgroundColor = '#fff2b2';  
+  document.getElementById(`${next}`).style.backgroundColor = 'lightgreen';
+}
+
+const getToday = () => {  
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+  var yyyy = today.getFullYear();
+  
+  today = yyyy + '-' + mm + '-' + dd;
+  return today
 }
