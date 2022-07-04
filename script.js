@@ -1,3 +1,19 @@
+document.addEventListener('DOMContentLoaded', async () => {
+  let launches = [];
+  let allDates = [];
+  
+  try {
+    launches = await getLaunches()
+    allDates = createCalendar(launches, allDates);
+    console.log(allDates, "All Dates")
+    await getNextLaunch();
+    addModals(allDates);
+  } catch (error) {
+    console.log("Error ", error)
+  }
+    console.log("Launches: ", launches);
+});
+
 const getLaunches = async () => {
   let response = await fetch('https://api.spacexdata.com/v5/launches/query', {
   method: 'POST',
@@ -25,22 +41,8 @@ const getLaunches = async () => {
   return launches.docs;
 }
 
-
-document.addEventListener('DOMContentLoaded', async () => {
-  let launches = [];
-  let allDates = [];
-  
-  try {
-    launches = await getLaunches()
-    allDates = createCalendar(launches, allDates);
-    await getNextLaunch();
-  } catch (error) {
-    console.log("Error ", error)
-  }
-    console.log("Launches: ", launches);
-});
-
 const createCalendar = (launches, allDates) => {
+  let a = allDates
   const months = [
   {month: "January", date: 31}, 
   {month: "February", date: 28}, 
@@ -76,7 +78,7 @@ const createCalendar = (launches, allDates) => {
       for(let launch = 0; launch < launches.length; launch++) {
         if(launches[launch].date_local.includes(dateLocal)) {          
 
-          allDates.push({date: dateLocal, launchDetails: launches[launch]})
+          a.push({date: dateLocal, launchDetails: launches[launch]})
 
           document.getElementById(`${dateLocal}`).style.backgroundColor = 'lightblue';
           document.getElementById(`${dateLocal}`).classList.add("has-launch");
@@ -84,8 +86,10 @@ const createCalendar = (launches, allDates) => {
         } 
       }
 
+
   }
 }
+    return a;
     
 }
 
@@ -138,4 +142,32 @@ const getToday = () => {
   
   today = yyyy + '-' + mm + '-' + dd;
   return today
+}
+
+
+const addModals = (allDates) => {
+  allDates = allDates.sort(function (a, b)
+{
+    return a.launchDetails.flight_number - b.launchDetails.flight_number;
+});
+
+
+  for (let i = 0; i < allDates.length; i++) {
+    document.getElementById(`${allDates[i].date}`).addEventListener("click", () => {
+      document.getElementById("myModal").style.display = "block";
+      document.getElementById('launch-info').innerHTML += `
+  <div id="launch">
+    <p>Flight #${allDates[i].launchDetails.flight_number}</p>
+    <p>Name: ${allDates[i].launchDetails.name}</p>
+  </div>`
+      document.querySelector('.close').addEventListener("click", () => {
+        document.getElementById('launch-info').innerHTML = ``;
+        document.getElementById("myModal").style.display = "none";
+      })
+      document.querySelector('#myModal').addEventListener("click", () => {
+        document.getElementById('launch-info').innerHTML = ``;
+        document.getElementById("myModal").style.display = "none";
+      })
+    })
+  }
 }
