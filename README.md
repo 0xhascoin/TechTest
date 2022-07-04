@@ -4,11 +4,13 @@
 
 1) I have worked with API's before on several projects:
 
-  1a) https://github.com/hasanelmi678/TravelAdvisor - A web app that lets advises users on resteraunts, hotels and attractions in locations that you are         travelling to. - Uses the Google maps API, RapidAPI (Travel Advisor API & Weather Map API).
+  1a. https://www.livehire.xyz/ - A full stack application that I developed on my own using MERN stack. The application is a remote hiring solution that         allows employers to mass interview potential employees.
+
+  1b. https://github.com/hasanelmi678/TravelAdvisor - A web app that lets advises users on resteraunts, hotels and attractions in locations that you are         travelling to. - Uses the Google maps API, RapidAPI (Travel Advisor API & Weather Map API).
   
-  1b) https://github.com/hasanelmi678/Cryptoverse - A web app that lets users track cryptocurrency price details and news articles from 50+ different             sources. - Uses RapidAPI - Crypto API, RapidAPI - Bing News Search API.
+  1c. https://github.com/hasanelmi678/Cryptoverse - A web app that lets users track cryptocurrency price details and news articles from 50+ different             sources. - Uses RapidAPI - Crypto API, RapidAPI - Bing News Search API.
   
-  1c) https://github.com/hasanelmi678/Realestateapp - A real estate website for properties in the United Arab Emirates.
+  1d. https://github.com/hasanelmi678/Realestateapp - A real estate website for properties in the United Arab Emirates.
       - Uses RapidAPI - UAE Real Estate API.
       
       
